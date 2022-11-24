@@ -8,7 +8,7 @@ class ScatterZoom {
       this.width = bBox.width - margin ;
       this.height = bBox.height - margin ;
       const padding = { top: 10, bottom: 40, left: 60, right: 20 };
-console.log( this.height);
+
       this.svg = d3
         .select("#"+tag)
         .attr("width", this.width + padding.right + padding.left)
