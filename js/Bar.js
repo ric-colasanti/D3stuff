@@ -36,7 +36,7 @@ class BarChart {
 
     // append the rectangles for the bar chart
     var chart = this.svg.selectAll(".bar")
-    chart.data(data)
+    chart.data(data)  // Newdata
       .enter().append("rect")
       .attr("class", "bar")
       .attr("fill", color)
@@ -44,12 +44,14 @@ class BarChart {
       .attr("width", xx.bandwidth())
       .attr("y", function (dd) { return yy(dd[value]); })
       .attr("height", function (dd) { return height - yy(dd[value]) });
-    chart.attr("x", function (dd) { return xx(dd[0]); })
+
+
+    chart.attr("x", function (dd) { return xx(dd[0]); }) // current data
       .attr("width", xx.bandwidth())
       .attr("y", function (dd) { return yy(dd[name]); })
       .attr("height", function (dd) { return height - yy(dd[value]) });
     // add the x Axis
-    chart.exit().remove()
+    chart.exit().remove() // remove data
 
     this.xAxis
       .attr("transform", "translate(0," + height + ")")
