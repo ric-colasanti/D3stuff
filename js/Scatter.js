@@ -35,7 +35,7 @@ class ScatterPlot {
         // append the rectangles for the bar chart
         var chart = this.svg.selectAll("circle")
         chart.data(data,function(d){return d[index]})
-            .enter().append("circle")
+            .enter().append("circle")// new data
             .attr("cx", function (dd) { return xx(dd[xaxis]); })
             .attr("cy", function (dd) { return yy(dd[yaxis]); })
             .attr("r", 3)
@@ -60,10 +60,10 @@ class ScatterPlot {
                 d3.select(this)
                     .attr("r", this.toggle ? 9 : 3)
             });
-        chart.attr("cx", function (dd) { return xx(dd[xaxis]); })
+        chart.attr("cx", function (dd) { return xx(dd[xaxis]); }) // current data
             .attr("cy", function (dd) { return yy(dd[yaxis]); });
         // add the x Axis
-        chart.exit().remove()
+        chart.exit().remove() . // remove data
 
         this.xAxis
             .attr("transform", "translate(0," + height + ")")
