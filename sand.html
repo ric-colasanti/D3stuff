@@ -11,16 +11,16 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     />
 
-    <title>Title</title>
+    <title>Sand</title>
   </head>
   <body>
     <div class="container" style="margin-top: 80px">
-      <h2>Test</h2>
+      <h2>Sand</h2>
       <div id="plot"></div>
-      <p>Bottom</p>
-      <button class="btn btn-primary tablinks" onclick="newdata()">
+     
+      <!-- <button class="btn btn-primary tablinks" onclick="newdata()">
         newdata
-      </button>
+      </button> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -40,7 +40,7 @@
       };
 
       let data = [];
-      for (let i = 0; i < 2000; i++) {
+      for (let i = 0; i < 20000; i++) {
         datum = {
           id: String.fromCharCode(97 + i),
           x: Math.random() * 100,
@@ -49,8 +49,6 @@
         data.push(datum);
       }
 
-
-       
       let margin = { top: 20, right: 20, bottom: 30, left: 40 };
       let width = 300 - margin.left - margin.right;
       let height = 300 - margin.top - margin.bottom;
@@ -99,7 +97,13 @@
           "transform",
           "translate(" + margin.left + "," + (height + margin.top) + ")"
         )
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x)).on("dblclick",function(d){ x.domain([
+          0,
+          d3.max(data, function (d) {
+            return d.x;
+          }),
+        ])
+        .nice(); update()});
 
       let yAxis = svg.append("g");
       yAxis
@@ -114,9 +118,36 @@
         .attr("height", height)
         .attr("fill", "none");
 
-
-        var brush = d3.brushX()                 // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] )  
+        var update = function(){
+          xAxis.transition().duration(1000).call(d3.axisBottom(x))          
+          plotArea.selectAll("circle")
+          .transition().duration(1000)
+          .attr("cx", function (d) {
+            return x(d.x);
+          })
+          .attr("cy", function (d) {
+            return y(d.y);
+          })
+        }
+      var updateChart = function (e) {
+        extent = e.selection;
+        if (!extent) {
+          console.log("here");
+        }else{
+          x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+          xAxis.select(".brush").call(brush.move, null);
+        }
+        update()
+          
+      };
+      var brush = d3
+        .brushX()
+        .extent([
+          [0, 0],
+          [width, height],
+        ])
+        .on("end", updateChart);
+      xAxis.append("g").attr("class", "brush").call(brush);
 
       var draw = function () {
         let chart = plotArea.selectAll("circle");
@@ -130,7 +161,7 @@
           .attr("cy", function (d) {
             return y(d.y);
           })
-          .attr("r", 3)
+          .attr("r", 1)
           .attr("fill", "red")
           .attr("clip-path", "url(#clippy)");
         chart
@@ -140,10 +171,8 @@
           .attr("cy", function (d) {
             return y(d.y);
           })
-          .attr("fill", "blue")
           .attr("clip-path", "url(#clippy)");
         chart.exit().remove();
-        chart.call(brush)
       };
 
       draw();
