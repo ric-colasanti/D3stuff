@@ -21,6 +21,9 @@
       <!-- <button class="btn btn-primary tablinks" onclick="newdata()">
         newdata
       </button> -->
+<br>
+      <p>Click on this webpage and move mouse over either of the axis and the pointer will change to a cross. click and drag on either axis to select region to zoom</p>
+      <p>Double click in an axis to un-zoom that axis</p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -108,7 +111,12 @@
       let yAxis = svg.append("g");
       yAxis
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y)).on("dblclick",function(d){ y.domain([0,
+          d3.max(data, function (d) {
+            return d.y;
+          })
+        ])
+        .nice(); update()});
 
       const clippingRect = plotArea
         .append("clipPath")
@@ -120,6 +128,7 @@
 
         var update = function(){
           xAxis.transition().duration(1000).call(d3.axisBottom(x))          
+          yAxis.transition().duration(1000).call(d3.axisLeft(y))          
           plotArea.selectAll("circle")
           .transition().duration(1000)
           .attr("cx", function (d) {
@@ -129,25 +138,43 @@
             return y(d.y);
           })
         }
-      var updateChart = function (e) {
+
+        var updateX= function (e) {
         extent = e.selection;
-        if (!extent) {
-          console.log("here");
-        }else{
+        if (extent!=null) {
           x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-          xAxis.select(".brush").call(brush.move, null);
+          xAxis.select(".brushX").call(brushX.move, null);
+          update()
         }
-        update()
-          
       };
-      var brush = d3
+      var brushX = d3
         .brushX()
         .extent([
           [0, 0],
           [width, height],
         ])
-        .on("end", updateChart);
-      xAxis.append("g").attr("class", "brush").call(brush);
+        .on("end", updateX);
+      xAxis.append("g").attr("class", "brushX").call(brushX);
+      
+      var updateY= function (e) {
+        extent = e.selection;
+        if (extent!=null) {
+          y.domain([  y.invert(extent[1]),y.invert(extent[0]), ])
+          yAxis.select(".brushY").call(brushY.move, null);
+          update()
+        }
+      };
+
+
+      var brushY = d3
+        .brushY()
+        .extent([
+        [- margin.left, 0],
+          [0, height],
+          
+        ])
+        .on("end", updateY);
+      yAxis.append("g").attr("class", "brushY").call(brushY);
 
       var draw = function () {
         let chart = plotArea.selectAll("circle");
@@ -163,16 +190,35 @@
           })
           .attr("r", 1)
           .attr("fill", "red")
-          .attr("clip-path", "url(#clippy)");
+          .on("mouseover", function (d) {
+          //console.log(this.__data__);
+          d3.select(this)
+            .attr("cursor", "pointer")
+            .style("fill", "green")
+            .attr("r", 6);
+        })
+        .on("mouseout", function (d) {
+          d3.select(this)
+            .attr("r", this.toggle ? 9 : 2)
+            .style("fill", this.toggle ? "green" : "red");
+        })
+        .on("click", function (d) {
+          this.toggle = !this.toggle; // declared variable setting it to true
+          d3.select(this)
+              .transition()
+              .duration(1000)
+              .attr("r", this.toggle ? 9 : 2)
+              .style("fill", this.toggle ? "green" : "red");
+      }).attr("clip-path", "url(#clippy)");;
         chart
           .attr("cx", function (d) {
             return x(d.x);
           })
           .attr("cy", function (d) {
             return y(d.y);
-          })
-          .attr("clip-path", "url(#clippy)");
+          }).attr("clip-path", "url(#clippy)");
         chart.exit().remove();
+        
       };
 
       draw();
