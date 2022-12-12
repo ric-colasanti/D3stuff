@@ -17,6 +17,7 @@
     <div class="container" style="margin-top: 80px">
       <h2>Sand</h2>
       <div id="plot"></div>
+      <div id="plot2"></div>
      
       <!-- <button class="btn btn-primary tablinks" onclick="newdata()">
         newdata
@@ -28,6 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/Scatter.js"></script>
 
     <script>
       var newdata = function () {
@@ -39,7 +41,7 @@
           };
           data.push(datum);
         }
-        draw();
+     //   draw();
       };
 
       let data = [];
@@ -52,176 +54,179 @@
         data.push(datum);
       }
 
-      let margin = { top: 20, right: 20, bottom: 30, left: 40 };
-      let width = 300 - margin.left - margin.right;
-      let height = 300 - margin.top - margin.bottom;
+      // let margin = { top: 20, right: 20, bottom: 30, left: 40 };
+      // let width = 300 - margin.left - margin.right;
+      // let height = 300 - margin.top - margin.bottom;
 
-      // set the ranges
+  
 
-      // append the svg object to the body of the page
-      // append a 'group' element to 'svg'
-      // moves the 'group' element to the top left margin
-      let svg = d3.select("#plot").append("svg");
-      plotArea = svg.append("g");
+      // // append the svg object to the body of the page
+      // // append a 'group' element to 'svg'
+      // // moves the 'group' element to the top left margin
+      // let svg = d3.select("#plot").append("svg");
+      // plotArea = svg.append("g");
 
-      svg
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .attr("style", "outline: thin solid black;");
+      // svg
+      //   .attr("width", width + margin.left + margin.right)
+      //   .attr("height", height + margin.top + margin.bottom)
+      //   .attr("style", "outline: thin solid black;");
 
-      plotArea.attr(
-        "transform",
-        "translate(" + [margin.left, margin.top] + ")"
-      );
-      let x = d3
-        .scaleLinear()
-        .range([0, width])
-        .domain([
-          0,
-          d3.max(data, function (d) {
-            return d.x;
-          }),
-        ])
-        .nice();
-      let y = d3
-        .scaleLinear()
-        .range([height, 0])
-        .domain([
-          0,
-          d3.max(data, function (d) {
-            return d.y;
-          }),
-        ])
-        .nice();
+      // plotArea.attr(
+      //   "transform",
+      //   "translate(" + [margin.left, margin.top] + ")"
+      // );
+      // let x = d3
+      //   .scaleLinear()
+      //   .range([0, width])
+      //   .domain([
+      //     0,
+      //     d3.max(data, function (d) {
+      //       return d.x;
+      //     }),
+      //   ])
+      //   .nice();
+      // let y = d3
+      //   .scaleLinear()
+      //   .range([height, 0])
+      //   .domain([
+      //     0,
+      //     d3.max(data, function (d) {
+      //       return d.y;
+      //     }),
+      //   ])
+      //   .nice();
 
-      let xAxis = svg.append("g");
-      xAxis
-        .attr(
-          "transform",
-          "translate(" + margin.left + "," + (height + margin.top) + ")"
-        )
-        .call(d3.axisBottom(x)).on("dblclick",function(d){ x.domain([
-          0,
-          d3.max(data, function (d) {
-            return d.x;
-          }),
-        ])
-        .nice(); update()});
+      // let xAxis = svg.append("g");
+      // xAxis
+      //   .attr(
+      //     "transform",
+      //     "translate(" + margin.left + "," + (height + margin.top) + ")"
+      //   )
+      //   .call(d3.axisBottom(x)).on("dblclick",function(d){ x.domain([
+      //     0,
+      //     d3.max(data, function (d) {
+      //       return d.x;
+      //     }),
+      //   ])
+      //   .nice(); update()});
 
-      let yAxis = svg.append("g");
-      yAxis
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(d3.axisLeft(y)).on("dblclick",function(d){ y.domain([0,
-          d3.max(data, function (d) {
-            return d.y;
-          })
-        ])
-        .nice(); update()});
+      // let yAxis = svg.append("g");
+      // yAxis
+      //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      //   .call(d3.axisLeft(y)).on("dblclick",function(d){ y.domain([0,
+      //     d3.max(data, function (d) {
+      //       return d.y;
+      //     })
+      //   ])
+      //   .nice(); update()});
 
-      const clippingRect = plotArea
-        .append("clipPath")
-        .attr("id", "clippy")
-        .append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("fill", "none");
+      // const clippingRect = plotArea
+      //   .append("clipPath")
+      //   .attr("id", "clippy")
+      //   .append("rect")
+      //   .attr("width", width)
+      //   .attr("height", height)
+      //   .attr("fill", "none");
 
-        var update = function(){
-          xAxis.transition().duration(1000).call(d3.axisBottom(x))          
-          yAxis.transition().duration(1000).call(d3.axisLeft(y))          
-          plotArea.selectAll("circle")
-          .transition().duration(1000)
-          .attr("cx", function (d) {
-            return x(d.x);
-          })
-          .attr("cy", function (d) {
-            return y(d.y);
-          })
-        }
+      //   var update = function(){
+      //     xAxis.transition().duration(1000).call(d3.axisBottom(x))          
+      //     yAxis.transition().duration(1000).call(d3.axisLeft(y))          
+      //     plotArea.selectAll("circle")
+      //     .transition().duration(1000)
+      //     .attr("cx", function (d) {
+      //       return x(d.x);
+      //     })
+      //     .attr("cy", function (d) {
+      //       return y(d.y);
+      //     })
+      //   }
 
-        var updateX= function (e) {
-        extent = e.selection;
-        if (extent!=null) {
-          x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-          xAxis.select(".brushX").call(brushX.move, null);
-          update()
-        }
-      };
-      var brushX = d3
-        .brushX()
-        .extent([
-          [0, 0],
-          [width, height],
-        ])
-        .on("end", updateX);
-      xAxis.append("g").attr("class", "brushX").call(brushX);
+      //   var updateX= function (e) {
+      //   extent = e.selection;
+      //   if (extent!=null) {
+      //     x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+      //     xAxis.select(".brushX").call(brushX.move, null);
+      //     update()
+      //   }
+      // };
+      // var brushX = d3
+      //   .brushX()
+      //   .extent([
+      //     [0, 0],
+      //     [width, height],
+      //   ])
+      //   .on("end", updateX);
+      // xAxis.append("g").attr("class", "brushX").call(brushX);
       
-      var updateY= function (e) {
-        extent = e.selection;
-        if (extent!=null) {
-          y.domain([  y.invert(extent[1]),y.invert(extent[0]), ])
-          yAxis.select(".brushY").call(brushY.move, null);
-          update()
-        }
-      };
+      // var updateY= function (e) {
+      //   extent = e.selection;
+      //   if (extent!=null) {
+      //     y.domain([  y.invert(extent[1]),y.invert(extent[0]), ])
+      //     yAxis.select(".brushY").call(brushY.move, null);
+      //     update()
+      //   }
+      // };
 
 
-      var brushY = d3
-        .brushY()
-        .extent([
-        [- margin.left, 0],
-          [0, height],
+      // var brushY = d3
+      //   .brushY()
+      //   .extent([
+      //   [- margin.left, 0],
+      //     [0, height],
           
-        ])
-        .on("end", updateY);
-      yAxis.append("g").attr("class", "brushY").call(brushY);
+      //   ])
+      //   .on("end", updateY);
+      // yAxis.append("g").attr("class", "brushY").call(brushY);
 
-      var draw = function () {
-        let chart = plotArea.selectAll("circle");
-        chart
-          .data(data)
-          .enter()
-          .append("circle")
-          .attr("cx", function (d) {
-            return x(d.x);
-          })
-          .attr("cy", function (d) {
-            return y(d.y);
-          })
-          .attr("r", 1)
-          .attr("fill", "red")
-          .on("mouseover", function (d) {
-          //console.log(this.__data__);
-          d3.select(this)
-            .attr("cursor", "pointer")
-            .style("fill", "green")
-            .attr("r", 6);
-        })
-        .on("mouseout", function (d) {
-          d3.select(this)
-            .attr("r", this.toggle ? 9 : 2)
-            .style("fill", this.toggle ? "green" : "red");
-        })
-        .on("click", function (d) {
-          this.toggle = !this.toggle; // declared variable setting it to true
-          d3.select(this)
-              .transition()
-              .duration(1000)
-              .attr("r", this.toggle ? 9 : 2)
-              .style("fill", this.toggle ? "green" : "red");
-      }).attr("clip-path", "url(#clippy)");;
-        chart
-          .attr("cx", function (d) {
-            return x(d.x);
-          })
-          .attr("cy", function (d) {
-            return y(d.y);
-          }).attr("clip-path", "url(#clippy)");
-        chart.exit().remove();
+      // var draw = function () {
+      //   let chart = plotArea.selectAll("circle");
+      //   chart
+      //     .data(data)
+      //     .enter()
+      //     .append("circle")
+      //     .attr("cx", function (d) {
+      //       return x(d.x);
+      //     })
+      //     .attr("cy", function (d) {
+      //       return y(d.y);
+      //     })
+      //     .attr("r", 1)
+      //     .attr("fill", "red")
+      //     .on("mouseover", function (d) {
+      //     //console.log(this.__data__);
+      //     d3.select(this)
+      //       .attr("cursor", "pointer")
+      //       .style("fill", "green")
+      //       .attr("r", 6);
+      //   })
+      //   .on("mouseout", function (d) {
+      //     d3.select(this)
+      //       .attr("r", this.toggle ? 9 : 2)
+      //       .style("fill", this.toggle ? "green" : "red");
+      //   })
+      //   .on("click", function (d) {
+      //     this.toggle = !this.toggle; // declared variable setting it to true
+      //     d3.select(this)
+      //         .transition()
+      //         .duration(1000)
+      //         .attr("r", this.toggle ? 9 : 2)
+      //         .style("fill", this.toggle ? "green" : "red");
+      // }).attr("clip-path", "url(#clippy)");;
+      //   chart
+      //     .attr("cx", function (d) {
+      //       return x(d.x);
+      //     })
+      //     .attr("cy", function (d) {
+      //       return y(d.y);
+      //     }).attr("clip-path", "url(#clippy)");
+      //   chart.exit().remove();
         
-      };
+      // };
 
-      draw();
+      // draw();
+      let scatter = new ScatterPlot("#plot2",300,300)
+      scatter.draw(data,"x","y","red")
+
     </script>
   </body>
 </html>
