@@ -17,7 +17,7 @@
     <div class="container" style="margin-top: 80px">
       <h2>Sand</h2>
       <div id="plot"></div>
-      <div id="plot2"></div>
+      <div id="plot2"  style="width: 98%; height: 500px" ></div>
      
       <!-- <button class="btn btn-primary tablinks" onclick="newdata()">
         newdata
@@ -224,7 +224,7 @@
       // };
 
       // draw();
-      let scatter = new ScatterPlot("#plot2",300,300)
+      let scatter = new ScatterPlot("plot2")
       scatter.draw(data,"x","y","red")
 
     </script>

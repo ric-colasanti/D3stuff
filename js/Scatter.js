@@ -1,5 +1,11 @@
 class ScatterPlot {
-    constructor(tag, width, height) {
+    constructor(tag) {
+        var element = document.getElementById(tag)
+      var bBox = element.getBoundingClientRect()
+      let height = bBox.height
+      let width = bBox.width
+      tag = "#"+tag
+      console.log(width,height);
         this.margin = { top: 20, right: 20, bottom: 30, left: 40 },
             this.width = width - this.margin.left - this.margin.right,
             this.height = height - this.margin.top - this.margin.bottom;
