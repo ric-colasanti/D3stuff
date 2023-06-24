@@ -7,30 +7,10 @@
 </head>
 <body>
     <div id="demo"></div>
-    <script>
-    console.log("AJAX");
-    const xhttp = new XMLHttpRequest();
-
-    // Define a callback function
-    // xhttp.onload = function() {
-    //     // Here you can use the Data
-    //     console.log("sucess");
-    //     document.getElementById("demo").innerHTML = this.responseText;
-    // }
-    xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("demo").innerHTML =
-      this.responseText;
-    }else{
-        console.log(this.readyState,this.status);
-    }
-  };
-    //The onreadystatechange function is called every time the readyState changes. 
-
-    // Send a request
-    xhttp.open("GET", "Data/test.txt");
-    xhttp.send();       
-
-    </script>
+    <script src="js/load.js"></script>
+   <script  src="js/devmain.js"></script>
+   <script>
+    println("hi")
+   </script>
 </body>
 </html>
