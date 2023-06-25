@@ -16,7 +16,6 @@
 
   <h2>Title</h2>
 
-  <div id="svg1" style="border-style:solid;"></div>
   <div id="svg2"></div>
   <button type="button" class="btn  btn-primary" onclick="changedata()">Change data</button>
 
@@ -54,33 +53,14 @@
     height = 270
     width = 300
     var x = d3.scaleLinear()
-    .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
+    .domain([0, 200])         // This is the min and the max of the data: 0 to 100 if percentages
     .range([0,width]); 
 
     var y = d3.scaleLinear()
     .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
     .range([height,0]); 
 
-    svg1 = d3.select("#svg1")
-      .append("svg")
-      .attr("width", 400)
-      .attr("height", 400)
-    
-      axis1_x = svg1.append('g')
-      .attr("transform", "translate(30," + (height +30) + ")" ) 
-      .call(d3.axisBottom(x))
-    
-      axis1_y = svg1.append('g')
-      .attr(
-            "transform", 
-            "translate(" + 30 + "," + 30+ ")"
-            ) 
-      .call(d3.axisLeft(y))
-    
-      plotArea1 = svg1.append("g")
-      .attr("id", "plotarea")
-      .attr("transform",
-        "translate(" + 30 + "," + 30 + ")")
+
 
         svg2 = d3.select("#svg2")
         .append("svg")
@@ -113,14 +93,11 @@
     .text("X axis title")
 
     var update = function () {
-      var chart = plotArea1.selectAll("circle")
-      chart.data(dataScatter)
-        .enter().append("circle")// new data
-        .attr("cx", function (d) { return x(d.time["2017"]["x"]) })
-        .attr("cy", function (d) { return y(d.time["2017"]["y"]) })
-        .attr("r", 2)
-        .style("fill", "red")
-
+      // rescale
+      x.domain([0,100])
+      axis2_x.call(d3.axisBottom(x).ticks(5))
+      
+      
       var chart = plotArea2.selectAll("circle")
       // new data
       chart.data(dataScatter)
@@ -129,11 +106,13 @@
         .attr("cy", function (d) { return y(d.time[datachoice]["y"]); })
         .attr("r", 2)
         .style("fill", "green")
-      // current data
+      
+        // current data
       chart.transition()
         .duration(2000)
         .attr("cx", function (d) { return x(d.time[datachoice]["x"]); })
         .attr("cy", function (d) { return y(d.time[datachoice]["y"]); })
+      
       // remove data
       chart.exit().remove()
     }
