@@ -16,7 +16,7 @@
 
   <h2>Title</h2>
 
-  <div id="svg2"></div>
+  <div id="svg2" ></div>
   <button type="button" class="btn  btn-primary" onclick="changedata()">Change data</button>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
@@ -27,7 +27,7 @@
 
 
 
-   
+
 
     var datachoice = "2016"
 
@@ -49,55 +49,59 @@
 
       });
     }
-    
-    height = 270
+
+    height = 170
     width = 300
     var x = d3.scaleLinear()
-    .domain([0, 200])         // This is the min and the max of the data: 0 to 100 if percentages
-    .range([0,width]); 
+      .domain([0, 200])         // This is the min and the max of the data: 0 to 100 if percentages
+      .range([0, width]);
 
     var y = d3.scaleLinear()
-    .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
-    .range([height,0]); 
+      .domain([0, 100])         // This is the min and the max of the data: 0 to 100 if percentages
+      .range([height, 0]);
 
 
 
-        svg2 = d3.select("#svg2")
-        .append("svg")
-        .attr("width", 400)
-        .attr("height", 400)
-        .append("g")
-        
-      plotArea2 = svg2.append("g")
-        .attr("id", "plotarea")
-        .attr("transform",
+    svg2 = d3.select("#svg2")
+      .append("svg")
+      .attr("width", 400)
+      .attr("height", 700)
+      .style("border","1px")
+      .style("border-style","solid")
+      .append("g")
+      
+
+    plotArea2 = svg2.append("g")
+      .attr("id", "plotarea")
+      .attr("transform",
         "translate(" + 30 + "," + 30 + ")")
+      
 
 
     axis2_x = svg2.append('g')
-      .attr("transform", "translate(30," + (height +30)  + ")" ) 
+      .attr("transform", "translate(30," + (height + 30) + ")")
       .call(d3.axisBottom(x).ticks(5))
-    
-      axis2_y = svg2.append('g')
+      
+    axis2_y = svg2.append('g')
       .attr(
-            "transform", 
-            "translate(" + 30 + "," + 30+ ")"
-            ) 
-      .call(d3.axisLeft(y).ticks(5))    
-    
-    
-      svg2.append("text")
-    .attr("text-anchor", "end")
-    .attr("x", (width/2)+80)
-    .attr("y", height+ 70)
-    .text("X axis title")
+        "transform",
+        "translate(" + 30 + "," + 30 + ")"
+      )
+      .call(d3.axisLeft(y).ticks(5))
+
+
+    var xTitle = svg2.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", (width / 2) + 80)
+      .attr("y", height + 70)
+      .text("X axis title")
 
     var update = function () {
       // rescale
-      x.domain([0,100])
+      x.domain([0, 100])
       axis2_x.call(d3.axisBottom(x).ticks(5))
-      
-      
+
+
       var chart = plotArea2.selectAll("circle")
       // new data
       chart.data(dataScatter)
@@ -106,22 +110,30 @@
         .attr("cy", function (d) { return y(d.time[datachoice]["y"]); })
         .attr("r", 2)
         .style("fill", "green")
-      
-        // current data
+
+      // current data
       chart.transition()
         .duration(2000)
         .attr("cx", function (d) { return x(d.time[datachoice]["x"]); })
         .attr("cy", function (d) { return y(d.time[datachoice]["y"]); })
-      
+
       // remove data
       chart.exit().remove()
     }
 
     var changedata = function () {
-      if (datachoice == "2017"){
+      if (datachoice == "2017") {
         datachoice = "2016"
-      }else{
-        datachoice= "2017"
+        xTitle.text(datachoice)
+        //width / 2) - xTitle.attr("x")/2
+        xTitle.attr("x", 10);
+        console.log(xTitle.attr("x"));
+      } else {
+        datachoice = "2017"
+        xTitle.text(datachoice)
+        //) - xTitle.attr("x")/2
+        xTitle.attr("x", width / 2);
+        console.log(xTitle.attr("width"));
       }
       update()
     }
